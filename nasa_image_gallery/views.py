@@ -29,14 +29,20 @@ def home(request):
 
 # función utilizada en el buscador.
 def search(request):
-    images, favourite_list = getAllImagesAndFavouriteList(request)
+
+    favourite_list=[] 
     search_msg = request.POST.get('query', '')
-    print(request,"AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA")
-    searchImg=services_nasa_image_gallery.getImagesBySearchInputLike(search_msg)
-    # si el usuario no ingresó texto alguno, debe refrescar la página; caso contrario, debe filtrar aquellas imágenes que posean el texto de búsqueda.
+
+    if search_msg=="":
+        search_msg="Space"
+        imagesSerch=services_nasa_image_gallery.getImagesBySearchInputLike(search_msg)
+    if search_msg != " ":
+        imagesSerch=services_nasa_image_gallery.getImagesBySearchInputLike(search_msg)
+
+#si el usuario no ingresó texto alguno, debe refrescar la página; caso contrario, debe filtrar aquellas imágenes que posean el texto de búsqueda.
     pass
-    if request!=" ":
-        return render(request, 'home.html', {'images': searchImg, 'favourite_list': favourite_list} )
+    if search_msg != " ":
+        return render(request, 'home.html', {'images': imagesSerch, 'favourite_list': favourite_list} )
     return redirect(home)
 
 
