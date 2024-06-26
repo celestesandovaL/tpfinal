@@ -28,6 +28,11 @@ def getAllImages(input=None):
 
 
 def getImagesBySearchInputLike(input):
+    if input =="":
+        input="Space"
+    if input.lower() =="marte":
+        input="mars"
+    
     return getAllImages(input)
 
 

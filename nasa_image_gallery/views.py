@@ -11,38 +11,32 @@ def index_page(request):
     return render(request, 'index.html')
 
 # auxiliar: retorna 2 listados -> uno de las imágenes de la API y otro de los favoritos del usuario.
-def getAllImagesAndFavouriteList(request):
+def getAllImagesAndFavouriteList(request):      #obtener todas las imagenes cuando inicia la pag por defecto
     images = services_nasa_image_gallery.getAllImages(None)
     favourite_list = []
 
 
-    return images, favourite_list
+    return images, favourite_list     
 
 # función principal de la galería.
 def home(request):
     # llama a la función auxiliar getAllImagesAndFavouriteList() y obtiene 2 listados: uno de las imágenes de la API y otro de favoritos por usuario*.
     # (*) este último, solo si se desarrolló el opcional de favoritos; caso contrario, será un listado vacío [].
-    images = getAllImagesAndFavouriteList(request)[0]
+    images = getAllImagesAndFavouriteList(request)[0]  
     favourite_list = []
-    return render(request, 'home.html', {'images': images, 'favourite_list': favourite_list} )
+    return render(request, 'home.html', {'images': images, 'favourite_list': favourite_list} ) #muestro todas las nasaCARD redirecciona a home,pasa imagen y lista de favs
 
 
 # función utilizada en el buscador.
-def search(request):
+def search(request):     #buscador
 
     favourite_list=[] 
     search_msg = request.POST.get('query', '')
-
-    if search_msg=="":
-        search_msg="Space"
-        imagesSerch=services_nasa_image_gallery.getImagesBySearchInputLike(search_msg)
-    if search_msg != " ":
-        imagesSerch=services_nasa_image_gallery.getImagesBySearchInputLike(search_msg)
-
-#si el usuario no ingresó texto alguno, debe refrescar la página; caso contrario, debe filtrar aquellas imágenes que posean el texto de búsqueda.
+    imagesSerch=services_nasa_image_gallery.getImagesBySearchInputLike(search_msg) #genera las cartas buscadas por el usuario
+    # si el usuario no ingresó texto alguno, debe refrescar la página; caso contrario, debe filtrar aquellas imágenes que posean el texto de búsqueda.
     pass
-    if search_msg != " ":
-        return render(request, 'home.html', {'images': imagesSerch, 'favourite_list': favourite_list} )
+    if search_msg != " ": #si existe muestro las imagenes buscadas por el usuario,si no redirecciono al home
+        return render(request, 'home.html', {'images': imagesSerch, 'favourite_list': favourite_list,} )
     return redirect(home)
 
 
